@@ -12,6 +12,7 @@ export class UserController {
       let vData = await this.userService.login(data);
       res.status(HttpStatus.OK).json({
         success: true,
+        data:vData
       });
 
   }
@@ -19,6 +20,32 @@ export class UserController {
   @Get('getAllUser/:id')
   async getAllUser(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
       let vData = await this.userService.getAllUser(id);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data:vData
+      });
+
+  }
+  @Get('getAllMood')
+  async getAllMood(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
+      let vData = await this.userService.getAllMood();
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data:vData
+      });
+
+  }
+  @Post('addMood')
+  async addMood(@Res() res: Response, @Param('token') tokenId: string,  @Body() data: any,) {
+      let vData = await this.userService.addMood(data);
+      res.status(HttpStatus.OK).json({
+        success: true,
+      });
+
+  }
+  @Get('getAllMoodStatus')
+  async getAllMoodStatus(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
+      let vData = await this.userService.getAllMoodStatus();
       res.status(HttpStatus.OK).json({
         success: true,
         data:vData
