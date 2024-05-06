@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, moodStatus, moodUserMapping } from './entities/user.entity';
 
-@Injectable()
+  @Injectable()
 export class UserService {
   constructor(){}
   @InjectRepository(User)
@@ -23,10 +23,14 @@ export class UserService {
    const password=data.password
     let saveControl = await this.userRepository.createQueryBuilder('u')
     .select(`u.id,u.name,u.email,u.password`)
-    .where('u.name =:name && u.email =:email && u.password=:password',{name:name,email:email,password:password})
+    .where('u.email =:email && u.password=:password',{email:email,password:password})
     .execute()
     return saveControl
   }
+  async signUp(data:any){
+     let saveControl = await this.userRepository.save(data)
+     return saveControl
+   }
   async getAllUser(id:number){
     let data = await this.userRepository.createQueryBuilder("u")
     .select(`u.id,u.name,u.email`)
@@ -41,8 +45,9 @@ export class UserService {
   async addMood(data){
     let saveControl = await this.moodUserMappingRepository.save(data);
   }
-  async getAllMoodStatus() {
-    const statusUserId = 2;
+  async getAllMoodStatus(id: number) {
+    const statusUserId = id;
+    
     const moodStatuses = [
         { id: 1, name: "Happy" },
         { id: 2, name: "Sad" },
@@ -57,14 +62,23 @@ export class UserService {
 
     const counts = await Promise.all(moodStatuses.map(async (mood) => {
         const count = await this.moodUserMappingRepository.createQueryBuilder("mu")
-        .leftJoin(moodStatus,"ms","mu.moodStatusId=ms.id")
-            .select("ms.id,ms.mood,mu.id, mu.moodStatusId, mu.statusUserId")
-            .where("mu.statusUserId = :statusUserId AND mu.moodStatusId = :moodStatusId", { moodStatusId: mood.id, statusUserId })
+            .leftJoin(moodStatus, "ms","mu.moodStatusId=ms.id") // Assuming "moodStatus" is the name of your related entity
+            .select("ms.id, ms.mood, mu.id, mu.moodStatusId, mu.statusUserId")
+            .where("mu.statusUserId = :statusUserId AND mu.moodStatusId = :moodStatusId AND mu.deletedAt IS NULL", { moodStatusId: mood.id, statusUserId:statusUserId })
             .getCount();
         return { [mood.name]: count };
     }));
 
     return Object.assign({}, ...counts);
+}
+
+
+async getCardList(){
+  const count = await this.moodUserMappingRepository.createQueryBuilder("mu")
+  .leftJoin(moodStatus,"ms","mu.moodStatusId=ms.id")
+  .select("ms.id,ms.mood,mu.id, mu.moodStatusId, mu.statusUserId,mu.createdAt as createdAt")
+  .execute()
+  return count
 }
 
   create(createUserDto: CreateUserDto) {

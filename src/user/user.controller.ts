@@ -17,6 +17,16 @@ export class UserController {
 
   }
 
+  @Post('signUp')
+  async signUp(@Res() res: Response, @Param('token') tokenId: string,  @Body() data: any,) {
+      let vData = await this.userService.signUp(data);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data:vData
+      });
+
+  }
+
   @Get('getAllUser/:id')
   async getAllUser(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
       let vData = await this.userService.getAllUser(id);
@@ -43,9 +53,18 @@ export class UserController {
       });
 
   }
-  @Get('getAllMoodStatus')
+  @Get('getAllMoodStatus/:id')
   async getAllMoodStatus(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
-      let vData = await this.userService.getAllMoodStatus();
+      let vData = await this.userService.getAllMoodStatus(id);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data:vData
+      });
+
+  }
+  @Get('getCardList')
+  async getCardList(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
+      let vData = await this.userService.getCardList();
       res.status(HttpStatus.OK).json({
         success: true,
         data:vData
