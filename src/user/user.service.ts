@@ -86,6 +86,13 @@ async addNotes(id:any,data){
   let saveControl =await this.moodUserMappingRepository.update({moodStatusId:id, statusUserId: data.statusUserId }, { notes: data.notes });
   return saveControl
 }
+async getNotes(id:number){
+  let data = await this.moodUserMappingRepository.createQueryBuilder("mu")
+  .select(`mu.id,mu.notes`)
+  .where('mu.id =:id',{id:id})
+  .execute()
+  return data;
+}
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }

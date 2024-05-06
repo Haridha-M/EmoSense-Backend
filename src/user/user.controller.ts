@@ -80,6 +80,15 @@ export class UserController {
       });
 
   }
+  @Get('getNotes/:id')
+  async getNotes(@Res() res: Response, @Param('id') id: number,  @Body() data: any) {
+      let vData = await this.userService.getNotes(id);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data:vData
+      });
+
+  }
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
