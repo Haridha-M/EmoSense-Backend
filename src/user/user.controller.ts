@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res,HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res,HttpStatus, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -68,6 +68,15 @@ export class UserController {
       res.status(HttpStatus.OK).json({
         success: true,
         data:vData
+      });
+
+  }
+  @Post('addNotes/:id')
+  async addNotes(@Res() res: Response, @Param('id') id: number,  @Body() data: any,@Req() req: Request) {
+    
+      let vData = await this.userService.addNotes(id,data);
+      res.status(HttpStatus.OK).json({
+        success: true,
       });
 
   }

@@ -88,6 +88,9 @@ export class moodUserMapping {
   @DeleteDateColumn()
   deletedAt: Date;
 
+  @Column({nullable:true})
+  notes: string;
+
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
   createdBy: User;

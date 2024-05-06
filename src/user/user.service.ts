@@ -80,7 +80,12 @@ async getCardList(){
   .execute()
   return count
 }
+async addNotes(id:any,data){
+  console.log(data,'hhhhhhh');
 
+  let saveControl =await this.moodUserMappingRepository.update({moodStatusId:id, statusUserId: data.statusUserId }, { notes: data.notes });
+  return saveControl
+}
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
