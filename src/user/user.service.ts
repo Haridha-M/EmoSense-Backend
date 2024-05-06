@@ -73,10 +73,11 @@ export class UserService {
 }
 
 
-async getCardList(){
+async getCardList(id:number){
   const count = await this.moodUserMappingRepository.createQueryBuilder("mu")
   .leftJoin(moodStatus,"ms","mu.moodStatusId=ms.id")
   .select("ms.id,ms.mood,mu.id, mu.moodStatusId, mu.statusUserId,mu.createdAt as createdAt")
+  .where('mu.statusUserId =:statusUserId',{statusUserId:id})
   .execute()
   return count
 }

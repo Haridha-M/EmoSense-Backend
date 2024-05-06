@@ -62,9 +62,9 @@ export class UserController {
       });
 
   }
-  @Get('getCardList')
+  @Get('getCardList/:id')
   async getCardList(@Res() res: Response, @Param('id') id: number,  @Body() data: any,) {
-      let vData = await this.userService.getCardList();
+      let vData = await this.userService.getCardList(id);
       res.status(HttpStatus.OK).json({
         success: true,
         data:vData
